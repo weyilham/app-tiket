@@ -4,6 +4,7 @@ use App\Models\Tiket;
 use GuzzleHttp\Psr7\Request;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\TiketController;
 use App\Http\Controllers\TransaksiController;
 
@@ -38,3 +39,6 @@ Route::get('/tiket', function () {
 Route::resource('/getTiket', TiketController::class);
 
 Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi');
+
+//cart
+Route::post('/cart', [CartController::class, 'addCart'])->name('cart');

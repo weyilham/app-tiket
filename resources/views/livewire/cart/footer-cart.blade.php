@@ -3,7 +3,7 @@
         <table>
             <tr>
                 <th width="700">Jumlah Pembelian </th>
-                <th><i class="fas fa-ticket-alt"></i> x <span class="qty-tiket">1</span>
+                <th><i class="fas fa-ticket-alt"></i> x <span class="qty-tiket">{{ Cart::count() }}</span>
                 </th>
             </tr>
             <tr>

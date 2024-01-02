@@ -14,6 +14,13 @@
             /* max-width: 30%; */
 
         }
+
+        .harga-tiket {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            /* left: 0px; */
+        }
     </style>
 @endpush
 
@@ -33,9 +40,10 @@
             <div class="card-body">
 
                 <div class="row">
+                    @foreach ($tiket as $item)
+                        <livewire:show-produk :item="$item" />
+                    @endforeach
 
-                    <livewire:show-produk />
-                    {{-- <livewire:show-produk /> --}}
 
                 </div>
             </div>
@@ -60,10 +68,12 @@
             }, 1000);
 
             $('.collapse').removeClass('show')
+
+
         })
     </script>
 @endpush
 
 @push('livewireScripts')
-    @livewireStyles
+    @livewireScripts
 @endpush

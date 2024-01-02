@@ -1,39 +1,58 @@
-<div>
+<div id="cart-item">
     <div class="card-body">
-
-        <div class="form-group">
-            <label for="nama">Nama Pembeli </label>
-            <input type="text" class="form-control" id="nama" placeholder="Jono Supriadi">
-        </div>
-
-        <div class="card shadow-sm border">
-            <div class="card-header">
-                <h4><i class="fas fa-ticket-alt" style="font-size: 16px"></i> Kolam Renang DM</h4>
-                <div class="card-header-action">
-                    <a data-collapse="#mycard-collapse" class="btn btn-icon btn-danger" href="#"><i
-                            class="fas fa-minus"></i></a>
-                </div>
-
+        @if (Cart::count() > 0)
+            <div class="form-group">
+                <label for="nama">Nama Pembeli </label>
+                <input type="text" class="form-control" id="nama" placeholder="Nama Pembeli" required>
             </div>
-            <div class="collapse show" id="mycard-collapse">
-                <div class="card-body">
-                    <div class="media">
-                        <img class="mr-3 rounded" src="/img/1.jpg" width="100px" alt="Generic placeholder image">
-                        <div class="media-body">
-                            <div class="form-group">
-                                <label for="nama">Jumlah : </label>
-                                <input type="number" value="1" min="1" class="form-control form-control-sm"
-                                    id="nama" placeholder="Jono Supriadi">
+            @foreach ($carts as $cart)
+                <div class="card shadow-sm border">
+                    <div class="card-header d-flex justify-content-between">
+                        <h4><i class="fas fa-ticket-alt" style="font-size: 16px"></i> {{ $cart->name }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="media">
+                            <img class="mr-3 rounded" src="/img/1.jpg" width="100px" alt="Generic placeholder image">
+                            <div class="media-body">
+                                <div class="form-group">
+                                    <label for="nama">Jumlah : </label>
+                                    <div class="btn-group" role="group" aria-label="Counter Buttons">
+                                        <!-- Tombol Kurang -->
+                                        @if ($jumlah > 1)
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                wire:click="decrement">-</button>
+                                        @else
+                                            <button type="button" class="btn btn-danger btn-sm" wire:click="decrement"
+                                                disabled>-</button>
+                                        @endif
+                                        <!-- Input Counter -->
+
+                                        <input type="text" class="form-control text-center form-control-sm"
+                                            id="counter" value="{{ $cart->qty }}" min="1" readonly
+                                            wire:model="jumlah">
+
+                                        <!-- Tombol Tambah -->
+
+                                        <button type="button" class="btn btn-success btn-sm"
+                                            wire:click="increment">+</button>
+
+                                    </div>
+                                    {{-- <input type="number" value="{{ $jumlah }}" min="1"
+                                class="form-control form-control-sm" id="nama" wire:model="jumlah"> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
+            @endforeach
 
-            </div>
+        @endif
 
-        </div>
+
         <hr class="m-0">
-        <livewire:cart.footer-cart />
+        <p>{{ $jumlah }}</p>
+        <livewire:cart.footer-cart :jumlah="$jumlah" />
         <hr class="m-0">
         <button class="btn btn-primary my-3"><i class="fas fa-money-bill-wave"></i> Bayar Pesanan</button>
 
