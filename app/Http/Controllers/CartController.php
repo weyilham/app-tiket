@@ -17,4 +17,16 @@ class CartController extends Controller
         Cart::add($tiket->id, $tiket->kategori, 1, $tiket->harga, 0);
         return view('livewire.cart.item-cart');
     }
+
+    public function updateCart(Request $request)
+    {
+        Cart::update($request->rowId, $request->qty);
+        return response()->json(array('jumCart' => Cart::count(), 'total' => Cart::subtotal()));
+    }
+
+    public function destroy()
+    {
+        Cart::destroy();
+        return response()->json(['carts' => "<p class='text-danger'>Belum ada item yang di pesan</p>", 'jumCart' => Cart::count()]);
+    }
 }

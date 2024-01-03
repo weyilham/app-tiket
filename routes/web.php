@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Tiket;
-use GuzzleHttp\Psr7\Request;
-use Yajra\Datatables\Datatables;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TiketController;
@@ -42,3 +40,5 @@ Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi
 
 //cart
 Route::post('/cart', [CartController::class, 'addCart'])->name('cart');
+Route::put('/cart', [CartController::class, 'updateCart'])->name('update.cart');
+Route::delete('/cart', [CartController::class, 'destroy'])->name('delete.cart');
