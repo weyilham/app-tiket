@@ -21,6 +21,10 @@
             left: 20px;
             /* left: 0px; */
         }
+
+        .modalPembayaran {
+            z-index: 100000;
+        }
     </style>
 @endpush
 
@@ -139,7 +143,8 @@
                                         </table>
                                     </div>
                                     <hr class="m-0">
-                                    <button class="btn btn-primary my-3"><i class="fas fa-money-bill-wave"></i> Bayar
+                                    <button class="btn btn-primary my-3" id="bayar-pesanan" data-toggle="modal"
+                                        data-target="#modalPembayaran"><i class="fas fa-money-bill-wave"></i> Bayar
                                         Pesanan</button>
 
 
@@ -155,11 +160,86 @@
 
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalPembayaran" tabindex="-1" role="dialog" aria-labelledby="modalPembayaranLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i
+                            class="fas fa-money-bill-wave btn btn-sm btn-primary"></i> Pembayaran</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="card col-12">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="bayar">
+                                    <table>
+                                        <tr>
+                                            <th>Total Pembayaran</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>Rp. <span class="total-pembayaran">{{ Cart::total() }}</span> </h3>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <div class="kembali">
+                                    <table>
+                                        <tr>
+                                            <th>Total Kembalian</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>Rp. <span class="total-kembalian">0</span></h3>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </div>
+                            <hr class="m-0 border-primary">
+
+                            <div class="card-body">
+                                <label for="">Jumlah Pembayaran</label>
+                                <input type="number" min="0" class="form-control" id="jumlah-bayar">
+
+                                <button class="btn btn-sm btn-warning mt-2 uang-pas">Uang Pas</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger tombol-keluar">Keluar</button>
+                    <button type="button" class="btn btn-primary tombol-bayar">Bayar Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
     <script>
+        function openNewWindow() {
+            // Ganti URL berikut dengan URL yang ingin Anda tuju
+            var newWindow = window.open("transaksi/print", "NewWindow",
+                "width=600, height=400");
+
+            // Opsional: Fokus pada jendela baru
+            if (newWindow) {
+                newWindow.focus();
+            }
+        }
         $(document).ready(function() {
+
+
+
             $('body').addClass('sidebar-mini')
             setInterval(() => {
                 var waktu = new Date();
@@ -168,6 +248,8 @@
             }, 1000);
 
             $('.collapse').removeClass('show')
+
+
 
 
             //addCart
@@ -207,7 +289,7 @@
                 })
             })
 
-            $('#qty').on('change', function() {
+            $(document).on('change', '#qty', function() {
                 const rowId = $('#rowId').val();
                 const qty = $(this).val();
 
@@ -221,10 +303,112 @@
                     success: function(response) {
                         $('.qty-tiket').html(response.jumCart)
                         $('.subtotal-cart').html(response.total)
-                        // console.log(response.jumCart);
+                        // console.log('ok');
                     }
                 })
             })
+
+            $(document).on('click', '#bayar-pesanan', function(e) {
+                $('.modal-backdrop').removeClass()
+                let total = $('.subtotal-cart').html()
+                $('.total-pembayaran').html(total)
+            })
+
+
+            //pembayaran uang pas
+            $(document).on('click', '.uang-pas', function() {
+                let jumlahBayar = $('#jumlah-bayar').val()
+                let totalBayar = $('.total-pembayaran').html()
+
+
+                let bayar = parseInt(totalBayar.toString().replace(',', ''))
+                let kembali = parseInt(totalBayar.toString().replace(',', '')) - parseInt(totalBayar
+                    .toString().replace(',', ''))
+                // console.log(totalKembalian);
+                $('#jumlah-bayar').val(bayar)
+                $('#jumlah-bayar').attr('readonly', true)
+
+                $('.total-kembalian').html(kembali)
+
+            })
+
+            $(document).on('click', '.tombol-keluar', function(e) {
+                $('.total-kembalian').html('0')
+                $('#jumlah-bayar').val('')
+                $('#jumlah-bayar').attr('readonly', false)
+                // alert('ok')
+                $('#modalPembayaran').toggleClass('show')
+            })
+
+            $(document).on('change', '#jumlah-bayar', function(e) {
+                let jumlahBayar = $('#jumlah-bayar').val()
+                let totalBayar = $('.total-pembayaran').html()
+
+
+                let bayar = parseInt(totalBayar.toString().replace(',', ''))
+                let kembali = parseInt(jumlahBayar) - bayar
+
+                $('#jumlah-bayar').attr('readonly', false)
+                $('.total-kembalian').html(kembali)
+            })
+
+
+
+            $(document).on('click', '.tombol-bayar', function(e) {
+                const nama = $('#nama').val();
+                let jumlahBayar = $('#jumlah-bayar').val()
+                let totalBayar = $('.total-pembayaran').html()
+                let bayar = parseInt(totalBayar.toString().replace(',', ''))
+
+                let kembali = parseInt(jumlahBayar) - bayar
+
+
+                $.ajax({
+                    url: "{{ route('transaksi') }}",
+                    type: 'POST',
+                    data: {
+
+                        nama: nama,
+                        jumlahBayar: jumlahBayar,
+                        bayar: bayar,
+                        kembali: kembali,
+                    },
+                    success: function(response) {
+                        // console.log(response);
+                        Swal.fire({
+                            title: "Terimakasih!",
+                            text: 'Pembayaran Berhasil',
+                            icon: "success",
+                            footer: `<button onclick="openNewWindow()" target='_blank' class='btn btn-sm btn-success'><i class="fas fa-print"></i> Cetak Tiket </button>`
+                        });
+                        $('#modalPembayaran').toggleClass('show')
+                        if ($("#modalPembayaran").css("display") === "block") {
+                            // Remove the display: block style
+                            $("#modalPembayaran").css("display", "");
+                        }
+                        $('.jum-pesanan').html(response.jumCart);
+                        $('.cart-item').html(response.cart);
+
+
+
+                    },
+                    error: function(errors) {
+
+                        Swal.fire({
+                            icon: "error",
+                            title: `Terjadi Kesalahan`,
+                            text: `Nama Pembeli atau Jumlah Pembayaran tidak Boleh kosong!`,
+                        });
+
+                    }
+
+
+                })
+
+
+            })
+
+
 
 
 

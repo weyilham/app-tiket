@@ -21,11 +21,14 @@ class DatabaseSeeder extends Seeder
 
         Tiket::create([
             'kategori' => 'Pemandian Air Panas',
-            'harga' => 10000
+            'harga' => 10000,
+            'gambar' => '/img/2.jpg'
         ]);
         Tiket::create([
             'kategori' => 'Kolam Renang',
-            'harga' => 15000
+            'harga' => 15000,
+            'gambar' => '/img/2.jpg'
+
         ]);
 
         User::create([

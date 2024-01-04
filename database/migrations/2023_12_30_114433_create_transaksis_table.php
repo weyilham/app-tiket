@@ -15,7 +15,7 @@ class CreateTransaksisTable extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('tiket_id'); // Kolom untuk foreign key
+            $table->unsignedBigInteger('produk_id'); // Kolom untuk foreign key
             $table->string('nama_pembeli');
             $table->date('tgl_transaksi');
             $table->integer('jumlah');
@@ -23,10 +23,11 @@ class CreateTransaksisTable extends Migration
             $table->string('jum_bayar');
             $table->string('kembalian');
             $table->string('sisa');
+            $table->string('tipe_pembayaran');
             $table->timestamps();
 
             // Mendefinisikan foreign key
-            $table->foreign('tiket_id')
+            $table->foreign('produk_id')
                 ->references('id')
                 ->on('tikets')
                 ->onDelete('cascade'); // Aksi yang akan diambil saat tiket terkait dihapus

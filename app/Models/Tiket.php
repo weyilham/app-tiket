@@ -13,6 +13,6 @@ class Tiket extends Model
     // Relasi one-to-many dengan model Transaksi
     public function transaksis()
     {
-        return $this->hasMany(Transaksi::class, 'tiket_id', 'id');
+        return $this->hasMany(Transaksi::class, 'produk_id', 'id');
     }
 }

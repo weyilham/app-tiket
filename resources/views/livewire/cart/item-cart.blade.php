@@ -8,7 +8,8 @@
             @foreach (Cart::content() as $cart)
                 <div class="card shadow-sm border">
                     <div class="card-header d-flex justify-content-between">
-                        <h4><i class="fas fa-ticket-alt" style="font-size: 16px"></i> {{ $cart->name }}</h4>
+                        <h4><i class="fas fa-ticket-alt" style="font-size: 16px"></i>
+                            {{ $cart->name }}</h4>
                     </div>
                     <div class="card-body">
                         <div class="media">
@@ -17,22 +18,9 @@
                                 <div class="form-group">
                                     <label for="nama">Jumlah : </label>
                                     <div class="btn-group" role="group" aria-label="Counter Buttons">
-                                        <!-- Tombol Kurang -->
-                                        @if (Cart::count() > 1)
-                                            <button type="button" class="btn btn-danger btn-sm">-</button>
-                                        @else
-                                            <button type="button" class="btn btn-danger btn-sm" wire:click="decrement"
-                                                disabled>-</button>
-                                        @endif
-                                        <!-- Input Counter -->
-
-                                        <input type="text" class="form-control text-center form-control-sm"
-                                            id="counter" value="{{ $cart->qty }}" min="1" readonly
-                                            wire:model="jumlah">
-
-                                        <!-- Tombol Tambah -->
-
-                                        <button type="button" class="btn btn-success btn-sm">+</button>
+                                        <input type="hidden" id="rowId" value="{{ $cart->rowId }}">
+                                        <input type="number" class="form-control text-center form-control-sm"
+                                            id="qty" value="{{ $cart->qty }}" min="1">
 
                                     </div>
 
@@ -43,7 +31,6 @@
 
                 </div>
             @endforeach
-
         @endif
 
 
@@ -57,12 +44,14 @@
                 </tr>
                 <tr>
                     <th width="700">Total Bayar (Rp) </th>
-                    <th>35000</th>
+                    <th class="subtotal-cart">{{ Cart::subtotal() }}</th>
                 </tr>
             </table>
         </div>
         <hr class="m-0">
-        <button class="btn btn-primary my-3"><i class="fas fa-money-bill-wave"></i> Bayar Pesanan</button>
+        <button class="btn btn-primary my-3" id="bayar-pesanan" data-toggle="modal" data-target="#modalPembayaran"><i
+                class="fas fa-money-bill-wave"></i> Bayar
+            Pesanan</button>
 
 
     </div>

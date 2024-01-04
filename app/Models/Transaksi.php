@@ -13,6 +13,6 @@ class Transaksi extends Model
 
     public function tiket()
     {
-        return $this->belongsTo(Tiket::class, 'tiket_id', 'id');
+        return $this->belongsTo(Tiket::class, 'produk_id', 'id');
     }
 }

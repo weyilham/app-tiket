@@ -17,6 +17,7 @@ class CreateTiketsTable extends Migration
             $table->id();
             $table->string('kategori');
             $table->integer('harga');
+            $table->string('gambar');
             $table->timestamps();
             $table->softDeletes();
         });

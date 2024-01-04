@@ -42,3 +42,7 @@ Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi
 Route::post('/cart', [CartController::class, 'addCart'])->name('cart');
 Route::put('/cart', [CartController::class, 'updateCart'])->name('update.cart');
 Route::delete('/cart', [CartController::class, 'destroy'])->name('delete.cart');
+
+//transaksi
+Route::post('/transaksi', [TransaksiController::class, 'store'])->name('store.transaksi');
+Route::get('/transaksi/print', [TransaksiController::class, 'print'])->name('print.transaksi');
